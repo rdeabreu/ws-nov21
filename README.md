@@ -4,7 +4,7 @@ On preparation for the workshop, deploy a testing application (we will use Googl
 
 https://github.com/GoogleCloudPlatform/microservices-demo
 
-## Microsgementation
+## Microsegmentation
 
 First let's start creating some tiers on Calico:
 
@@ -57,6 +57,13 @@ spec:
   types:
   - Ingress
 ```
+
+Create microsegmentation rules between services
+
+```
+kubectl create -f hipsterpolicies.yaml
+```
+
 
   
   
