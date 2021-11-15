@@ -74,7 +74,60 @@ Once we have isolated the PCI environment, we can create microsegmentation rules
 kubectl create -f hipsterpolicies.yaml
 ```
 
+## Access Controls
 
+In order to test egress controls with dns policies we will deploy some multitool apps:
+
+```
+kubectl create -f apps.yaml
+```
+
+If you access a pod in the app2 namespace, for exanple, it should have unrestricted access to internet.
+
+Now, let's implement some egress access control in form of a DNS policy:
+
+```
+apiVersion: projectcalico.org/v3
+kind: NetworkSet
+metadata:
+  name: app1-trusted-domains
+  namespace: app1
+  labels:
+    external-ep: app1-trusted-domains
+spec:
+  allowedEgressDomains:
+    - 'github.com'
+
+---
+
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: default.egress-from-app2
+  namespace: app2
+spec:
+  egress:
+  - action: Allow
+    destination:
+      namespaceSelector: all()
+      ports:
+      - 53
+      selector: k8s-app == "kube-dns"
+    protocol: UDP
+    source: {}
+  - action: Allow
+    destination:
+      selector: external-ep == "app2-trusted-domains"
+    source: {}
+  order: 400
+  selector: app == "app2"
+  tier: default
+  types:
+  - Egress
+  
+  ```
+  
+  
   
   
   
