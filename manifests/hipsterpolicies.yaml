@@ -1,0 +1,279 @@
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: default.cartservice-hipstershop
+  namespace: default
+spec:
+  egress:
+  - action: Allow
+    destination:
+      namespaceSelector: all()
+      ports:
+      - 53
+      selector: k8s-app == "kube-dns"
+    protocol: UDP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 6379
+      selector: app == "redis-cart"
+    protocol: TCP
+    source: {}
+  ingress:
+  - action: Allow
+    destination:
+      ports:
+      - 7070
+    protocol: TCP
+    source:
+      selector: app == "checkoutservice"
+  - action: Allow
+    destination:
+      ports:
+      - 7070
+    protocol: TCP
+    source:
+      selector: app == "frontend"
+  order: 875
+  selector: app == "cartservice"
+  tier: default
+  types:
+  - Ingress
+  - Egress
+
+---
+
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: default.checkoutservice-hipstershop
+  namespace: default
+spec:
+  egress:
+  - action: Allow
+    destination:
+      namespaceSelector: all()
+      ports:
+      - 53
+      selector: k8s-app == "kube-dns"
+    protocol: UDP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 7070
+    protocol: TCP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 8080
+      selector: app == "emailservice"
+    protocol: TCP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 50051
+      selector: app == "paymentservice"
+    protocol: TCP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 3550
+      selector: app == "productcatalogservice"
+    protocol: TCP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 50051
+      selector: app == "shippingservice"
+    protocol: TCP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 7000
+      selector: app == "currencyservice"
+    protocol: TCP
+    source: {}
+  order: 650
+  selector: app == "checkoutservice"
+  tier: default
+  types:
+  - Egress
+
+---
+
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: default.currencyservice-hipstershop
+  namespace: default
+spec:
+  ingress:
+  - action: Allow
+    destination:
+      ports:
+      - 7000
+    protocol: TCP
+    source:
+      selector: app == "checkoutservice"
+  order: 1650
+  selector: app == "currencyservice"
+  tier: default
+  types:
+  - Ingress
+
+---
+
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: default.emailservice-hipstershop
+  namespace: default
+spec:
+  ingress:
+  - action: Allow
+    destination:
+      ports:
+      - 8080
+    protocol: TCP
+    source:
+      selector: app == "checkoutservice"
+  order: 1500
+  selector: app == "emailservice"
+  tier: default
+  types:
+  - Ingress
+
+---
+
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: default.frontend-hipstershop
+  namespace: default
+spec:
+  egress:
+  - action: Allow
+    destination:
+      namespaceSelector: all()
+      ports:
+      - 53
+      selector: k8s-app == "kube-dns"
+    protocol: UDP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 7070
+      selector: app == "cartservice"
+    protocol: TCP
+    source: {}
+  ingress:
+  - action: Allow
+    destination:
+      ports:
+      - 8080
+    protocol: TCP
+    source: {}
+  order: 1100
+  selector: app == "frontend"
+  tier: default
+  types:
+  - Ingress
+  - Egress
+
+---
+
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: default.paymentservice-hipstershop
+  namespace: default
+  resourceVersion: "1322978"
+  uid: ca8387b0-93dd-41fa-8f78-90fd46270807
+spec:
+  ingress:
+  - action: Allow
+    destination:
+      ports:
+      - 50051
+    protocol: TCP
+    source:
+      selector: app == "checkoutservice"
+  order: 1600
+  selector: app == "paymentservice"
+  tier: default
+  types:
+  - Ingress
+
+---
+
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: default.productcatalogservice-hipstershop
+  namespace: default
+spec:
+  ingress:
+  - action: Allow
+    destination:
+      ports:
+      - 3550
+    protocol: TCP
+    source:
+      selector: app == "checkoutservice"
+  order: 1400
+  selector: app == "productcatalogservice"
+  tier: default
+  types:
+  - Ingress
+
+---
+
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: default.redis-cart-hipstershop
+  namespace: default
+spec:
+  ingress:
+  - action: Allow
+    destination:
+      ports:
+      - 6379
+    protocol: TCP
+    source:
+      selector: app == "cartservice"
+  order: 1300
+  selector: app == "redis-cart"
+  tier: default
+  types:
+  - Ingress
+
+---
+
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: default.shippingservice-hipstershop
+  namespace: default
+spec:
+  ingress:
+  - action: Allow
+    destination:
+      ports:
+      - 50051
+    protocol: TCP
+    source:
+      selector: app == "checkoutservice"
+  order: 1700
+  selector: app == "shippingservice"
+  tier: default
+  types:
+  - Ingress
