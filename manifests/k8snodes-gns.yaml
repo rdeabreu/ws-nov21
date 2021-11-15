@@ -1,0 +1,9 @@
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkSet
+metadata:
+  labels:
+    role: k8snode
+  name: k8snodes-nohep
+spec:
+  nets:
+  - 10.0.1.0/24
