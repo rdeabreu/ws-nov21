@@ -1,0 +1,24 @@
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: default.egress-from-app2
+  namespace: app2
+spec:
+  egress:
+  - action: Allow
+    destination:
+      namespaceSelector: all()
+      ports:
+      - 53
+      selector: k8s-app == "kube-dns"
+    protocol: UDP
+    source: {}
+  - action: Allow
+    destination:
+      selector: external-ep == "app2-trusted-domains"
+    source: {}
+  order: 400
+  selector: app == "app2"
+  tier: default
+  types:
+  - Egress
