@@ -29,12 +29,20 @@ spec:
 There will be an additional Tier which secures Tigera Components. Now, we can proceed to install some base policies:
 
 ```
-kubectl create -f basepolicies.yaml
+kubectl create -f quarentine.yaml
+```
+
+The dns polciy opens the access from k8s hosts as well. This policy is not needed to showcase microsegmentation, and hosts usually will be added as Endpoints (HEP). So, this part can be skipped if you are replicating the steps on your environment:
+
+```
+kubectl create -f k8snodes-gns.yaml
+kubectl create -f coredns.yaml
 ```
 
 Now we will create a policy which provides external access to our PCI environment, and provides microsegmentation between compliant services:
 
 ```  
+apiVersion: projectcalico.org/v3
 kind: GlobalNetworkPolicy
 metadata:
   name: security.pciwhitelist
@@ -58,7 +66,9 @@ spec:
   - Ingress
 ```
 
-Create microsegmentation rules between services
+We must label all components with pci=true for the policy above to be effective.
+
+Once we have isolated the PCI environment, we can create microsegmentation rules between services:
 
 ```
 kubectl create -f hipsterpolicies.yaml
