@@ -74,6 +74,23 @@ Once we have isolated the PCI environment, we can create microsegmentation rules
 kubectl create -f hipsterpolicies.yaml
 ```
 
+Finally, in order to implement a Zero-Trust approach, we will implement a default deny for everything else in that namespace:
+
+```
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: default.hipsetrshop-deny
+  namespace: default
+spec:
+  order: 1800
+  selector: all()
+  tier: default
+  types:
+  - Ingress
+  - Egress
+```
+
 ## Access Controls
 
 In order to test egress controls with dns policies we will deploy some multitool apps:
@@ -81,6 +98,8 @@ In order to test egress controls with dns policies we will deploy some multitool
 ```
 kubectl create -f apps.yaml
 ```
+
+### DNS policy
 
 If you access a pod in the app2 namespace, for exanple, it should have unrestricted access to internet.
 
@@ -125,9 +144,64 @@ spec:
   types:
   - Egress
   
-  ```
+```
   
+You can now retest the connectivity. Only github.com should be accessible.
   
+### Global Threat Feeds
+
+You can prevent anonymization attacks, or access using Global Threat Feeds. With them, you can create Global Network Sets that can be used in Network Policies by means of native K8s constructs as labels and selectors. Below there is an example of the Feodo service for Botnet IPs:
+
+https://feodotracker.abuse.ch/
+
+```
+apiVersion: projectcalico.org/v3
+kind: GlobalThreatFeed
+metadata:
+  name: global.threatfeed.ipfeodo
+spec:
+  pull:
+    http:
+      url: https://feodotracker.abuse.ch/downloads/ipblocklist.txt
+  globalNetworkSet:
+    labels:
+      feed: feodo
+```
+
+## Compliance Reports
+
+Compliance report examples:
+
+https://docs.tigera.io/compliance/overview#configure-and-schedule-reports
+
+## Wireguard Encryption
+
+To Enable Wireguard encryption we must patch the felixconfiguration resource:
+
+```
+kubectl patch felixconfiguration default --type='merge' -p
+'{"spec":{"wireguardEnabled":true}}'
+```
   
-  
+As Wireguard stats are a tech preview feature, in order to have them displayed prometheus metrics must be enabled for them:
+
+```
+kubectl patch installation.operator.tigera.io default --type merge -p '{"spec":{"nodeMetricsPort":9091}}'
+```
+
+## Intrusion Detection
+
+### Anomaly Detection
+
+To configure anomaly detection:
+
+https://docs.tigera.io/threat/anomaly-detection/customizing
+
+### Honeypods
+
+To deploy Honepods:
+
+https://docs.tigera.io/threat/honeypod/honeypods#deploy-honeypods-in-clusters
+
+
   
