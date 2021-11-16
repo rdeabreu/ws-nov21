@@ -201,7 +201,7 @@ https://docs.tigera.io/compliance/overview#configure-and-schedule-reports
 To Enable Wireguard encryption we must patch the felixconfiguration resource:
 
 ```
-kubectl patch felixconfiguration default --type='merge' -p
+kubectl patch felixconfiguration default --type='merge' -p \
 '{"spec":{"wireguardEnabled":true}}'
 ```
   
