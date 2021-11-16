@@ -51,7 +51,6 @@ Exec in any of the pods deployed in the app1 namespace, and check connectivity t
 kubectl get pod -o wide | grep cartservice
 ```
 ```
-```
 APP1_POD=$(kubectl get pod -n app1 --no-headers -o name | head -1) && echo $APP1_POD
 ```
 ```
