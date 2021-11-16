@@ -214,5 +214,17 @@ To deploy Honepods:
 
 https://docs.tigera.io/threat/honeypod/honeypods#deploy-honeypods-in-clusters
 
+### Deep Packet Inspection
+
+```
+apiVersion: projectcalico.org/v3
+kind: DeepPacketInspection
+metadata:
+  name: sample-dpi
+  namespace: default
+spec:
+  selector: app == "frontend"
+```
+
 
   
