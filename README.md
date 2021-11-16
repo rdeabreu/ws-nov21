@@ -66,7 +66,9 @@ spec:
   - Ingress
 ```
 
-We must label all components with pci=true for the policy above to be effective (use the command 'kubectl label pod <pod_name> pci=true')
+We must label all components with pci=true for the policy above to be effective 
+
+#### Tip: (use the command 'kubectl label pod <pod_name> pci=true')
 
 Once we have isolated the PCI environment, we can create microsegmentation rules between services:
 
