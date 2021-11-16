@@ -198,18 +198,7 @@ https://docs.tigera.io/compliance/overview#configure-and-schedule-reports
 
 ## Wireguard Encryption
 
-To Enable Wireguard encryption we must patch the felixconfiguration resource:
-
-```
-kubectl patch felixconfiguration default --type='merge' -p \
-'{"spec":{"wireguardEnabled":true}}'
-```
-  
-As Wireguard stats are a tech preview feature, in order to have them displayed prometheus metrics must be enabled for them:
-
-```
-kubectl patch installation.operator.tigera.io default --type merge -p '{"spec":{"nodeMetricsPort":9091}}'
-```
+https://docs.tigera.io/v3.10/compliance/encrypt-cluster-pod-traffic
 
 ## Intrusion Detection
 
