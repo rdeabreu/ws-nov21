@@ -121,12 +121,6 @@ spec:
 
 ## Access Controls
 
-In order to test egress controls with dns policies we will deploy some multitool apps:
-
-```
-kubectl create -f apps.yaml
-```
-
 ### DNS policy
 
 If you access a pod in the app2 namespace, for exanple, it should have unrestricted access to internet.
