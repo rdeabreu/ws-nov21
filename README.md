@@ -144,8 +144,8 @@ spec:
 apiVersion: crd.projectcalico.org/v1
 kind: NetworkPolicy
 metadata:
-  name: default.egress-from-app2
-  namespace: app2
+  name: default.egress-from-app1
+  namespace: app1
 spec:
   egress:
   - action: Allow
@@ -158,10 +158,10 @@ spec:
     source: {}
   - action: Allow
     destination:
-      selector: external-ep == "app2-trusted-domains"
+      selector: external-ep == "app1-trusted-domains"
     source: {}
   order: 400
-  selector: app == "app2"
+  selector: app == "app1"
   tier: default
   types:
   - Egress
