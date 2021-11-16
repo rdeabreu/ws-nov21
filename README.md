@@ -131,10 +131,10 @@ Now, let's implement some egress access control in form of a DNS policy:
 apiVersion: projectcalico.org/v3
 kind: NetworkSet
 metadata:
-  name: app1-trusted-domains
-  namespace: app1
+  name: app2-trusted-domains
+  namespace: app2
   labels:
-    external-ep: app1-trusted-domains
+    external-ep: app2-trusted-domains
 spec:
   allowedEgressDomains:
     - 'github.com'
@@ -144,8 +144,8 @@ spec:
 apiVersion: crd.projectcalico.org/v1
 kind: NetworkPolicy
 metadata:
-  name: default.egress-from-app1
-  namespace: app1
+  name: default.egress-from-app2
+  namespace: app2
 spec:
   egress:
   - action: Allow
@@ -158,10 +158,10 @@ spec:
     source: {}
   - action: Allow
     destination:
-      selector: external-ep == "app1-trusted-domains"
+      selector: external-ep == "app2-trusted-domains"
     source: {}
   order: 400
-  selector: app == "app1"
+  selector: app == "app2"
   tier: default
   types:
   - Egress
