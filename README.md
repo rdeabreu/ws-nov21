@@ -51,10 +51,10 @@ Exec in any of the pods deployed in the app1 namespace, and check connectivity t
 kubectl get pod -o wide | grep cartservice
 ```
 ```
-APP1_POD=$(kubectl get pod -n app1 --no-headers -o name | head -1) && echo $APP1_POD
+APP1_POD=$(kubectl get pod -n app2 --no-headers -o name | head -1) && echo $APP1_POD
 ```
 ```
-kubectl exec -ti $APP1_POD -n app1 -- sh
+kubectl exec -ti $APP1_POD -n app2 -- sh
 ```
 
 Once in the pod, try a netcat to the IP ADDRESS of the cartservice on port 7070, you should have connectivity:
