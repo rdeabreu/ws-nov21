@@ -39,6 +39,31 @@ kubectl create -f k8snodes-gns.yaml
 kubectl create -f coredns.yaml
 ```
 
+Before implementing our first PCI policy, let's deploy an application we can test from:
+
+```
+kubectl create -f apps.yaml
+```
+
+Exec in any of the pods deployed in the app1 namespace, and check connectivity to port 7070 of the cartservice
+
+```
+kubectl get pod -o wide | grep cartservice
+```
+```
+```
+APP1_POD=$(kubectl get pod -n app1 --no-headers -o name | head -1) && echo $APP1_POD
+```
+```
+kubectl exec -ti $APP1_POD -n app1 -- sh
+```
+
+Once in the pod, try a netcat to the IP ADDRESS of the cartservice on port 7070, you should have connectivity:
+
+```
+nc -zv <IP_ADDRESS> 7070
+```
+
 Now we will create a policy which provides external access to our PCI environment, and provides microsegmentation between compliant services:
 
 ```  
@@ -66,9 +91,11 @@ spec:
   - Ingress
 ```
 
-We must label all components with pci=true for the policy above to be effective 
+We must label all components with pci=true for the policy above to be effective. 
 
 #### Tip: (use the command 'kubectl label pod <pod_name> pci=true')
+
+Just with the rule above, the connectivity between other pods will fail, you can test with the same pod in the app1 namespace as before.
 
 Once we have isolated the PCI environment, we can create microsegmentation rules between services:
 
