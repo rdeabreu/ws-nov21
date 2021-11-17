@@ -29,7 +29,7 @@ spec:
 There will be an additional Tier which secures Tigera Components. Now, we can proceed to install some base policies:
 
 ```
-kubectl create -f quarentine.yaml
+kubectl create -f quarantine.yaml
 ```
 
 The dns polciy opens the access from k8s hosts as well. This policy is not needed to showcase microsegmentation, and hosts usually will be added as Endpoints (HEP). So, this part can be skipped if you are replicating the steps on your environment:
